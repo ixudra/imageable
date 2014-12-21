@@ -1,0 +1,42 @@
+{
+    "name": "ixudra/imageable",
+    "description": "Custom Laravel imaging package for the Laravel 4 framework - developed by Ixudra",
+    "version": "1.0.0",
+    "keywords": ["Ixudra", "image", "Laravel"],
+    "homepage": "http://ixudra.be",
+    "license": "MIT",
+
+    "authors": [
+        {
+            "name": "Jan Oris",
+            "email": "jan.oris@ixudra.be"
+        }
+    ],
+
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/support": ">=4.2",
+        "illuminate/database": ">=4.2",
+        "illuminate/validation": ">=4.2",
+        "illuminate/filesystem": ">=4.2",
+        "laracasts/presenter": "0.1.*",
+        "ixudra/validation": "1.*",
+        "ixudra/translation": "1.*"
+    },
+
+    "require-dev": {
+        "phpunit/phpunit" : "4.1.*",
+        "mockery/mockery": "dev-master@dev"
+    },
+
+    "autoload": {
+        "classmap": [
+            "src/migrations"
+        ],
+        "psr-0": {
+            "Ixudra\\Imageable": "src/"
+        }
+    },
+
+    "minimum-stability": "stable"
+}
