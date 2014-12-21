@@ -1,5 +1,0 @@
-suites:
-  laracasts_suite:
-    namespace: Laracasts
-    src_path: src
-    spec_prefix: spec
