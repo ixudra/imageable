@@ -5,7 +5,7 @@ use \Str;
 use \File;
 
 use Ixudra\Imageable\Models\Image;
-use Ixudra\Imageable\Models\Response\BaseModelResponse;
+use Ixudra\Imageable\Models\Response\FactoryResponse;
 
 class ImageFactory {
 
@@ -16,7 +16,7 @@ class ImageFactory {
         $image = new Image();
         $imageResponse = $image->make( $input );
 
-        $response = new BaseModelResponse( null, $input );
+        $response = new FactoryResponse( null, $input );
         if( $imageResponse->isSuccessful() ) {
             $response->setModel($image);
             $response->addNotifications('success', array('Image created successfully'));
@@ -33,7 +33,7 @@ class ImageFactory {
 
         $imageResponse = $image->modify( $input );
 
-        $response = new BaseModelResponse( $image, $input );
+        $response = new FactoryResponse( $image, $input );
         if( $imageResponse->isSuccessful() ) {
             $response->addNotifications('success', array('Image updated successfully'));
         } else {

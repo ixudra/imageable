@@ -6,7 +6,7 @@ use App;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Laracasts\Presenter\PresentableTrait;
 
-use Ixudra\Imageable\Models\Response\BaseModelResponse;
+use Ixudra\Imageable\Models\Response\FactoryResponse;
 
 class Image extends Eloquent {
 
@@ -37,7 +37,7 @@ class Image extends Eloquent {
 
     public function make($input)
     {
-        $response = new BaseModelResponse($this, $input);
+        $response = new FactoryResponse($this, $input);
 
         $validator = App::make( $this->getValidator('create') );
         $validator->setAttributes($input);
@@ -56,14 +56,14 @@ class Image extends Eloquent {
             )
         );
 
-//        $response->addNotifications('success', array('Image created successfully'), true);
+        $response->addNotifications('success', array('Image created successfully'));
 
         return $response;
     }
 
     public function modify($input)
     {
-        $response = new BaseModelResponse($this, $input);
+        $response = new FactoryResponse($this, $input);
 
         $validator = App::make( $this->getValidator('edit') );
         $validator->setAttributes($input);
@@ -85,7 +85,7 @@ class Image extends Eloquent {
             $this->file_name = $input[ 'file_name' ];
         }
 
-//        $response->addNotifications('success', array('Image edited successfully'), true);
+        $response->addNotifications('success', array('Image edited successfully'));
 
         return $response;
     }
@@ -95,8 +95,8 @@ class Image extends Eloquent {
         unlink( $this->getFullPath() );
         $this->delete();
 
-        $response = new BaseModelResponse();
-//        $response->addNotifications('success', array($this->translationKey .'.delete.success'), true);
+        $response = new FactoryResponse();
+        $response->addNotifications('success', array('Image deleted successfully'));
 
         return $response;
     }
@@ -128,7 +128,7 @@ class Image extends Eloquent {
         return false;
     }
 
-    public function forceSave(array $options = array())
+    public function forceSave()
     {
         return $this->save( array( 'validator' => 'testing' ) );
     }
@@ -174,7 +174,9 @@ class Image extends Eloquent {
             $fileName = $this->getOriginal('file_name');
         }
 
-        return public_path( $this->imageable->getImagePath() .'/'. $fileName );
+        $path = public_path( $this->imageable->getImagePath() .'/'. $fileName );
+
+        return str_replace('//', '/', $path);
     }
 
 

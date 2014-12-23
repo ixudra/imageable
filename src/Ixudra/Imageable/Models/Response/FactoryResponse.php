@@ -1,7 +1,7 @@
 <?php namespace Ixudra\Imageable\Models\Response;
 
 
-class BaseModelResponse {
+class FactoryResponse {
 
     protected $model;
 
@@ -40,26 +40,21 @@ class BaseModelResponse {
 
     public function getNotifications($type)
     {
-        if( !isset($this->notifications[$type]) ) {
+        if( !isset($this->notifications[ $type ]) ) {
             return array();
         }
 
-        return $this->notifications[$type];
+        return $this->notifications[ $type ];
     }
 
-    public function addNotifications($type, $notifications, $translate = false)
+    public function addNotifications($type, $notifications)
     {
-        if( !isset($this->notifications[$type]) ) {
-            $this->notifications[$type] = array();
+        if( !isset($this->notifications[ $type ]) ) {
+            $this->notifications[ $type ] = array();
         }
 
         foreach( $notifications as $notification ) {
-            $message = $notification;
-            if( $translate ) {
-                $message = Translate::model($notification);
-            }
-
-            array_push($this->notifications[$type], $message);
+            array_push( $this->notifications[ $type ], $notification );
         }
     }
 

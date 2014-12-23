@@ -7,8 +7,7 @@ class CreateImageValidator extends BaseValidator {
         'file'                  => 'required|mimes:jpeg,jpg,png',
         'file_name'             => 'required|max:32',
         'title'                 => 'max:128',
-        'alt'                   => 'max:256',
-        'imageable_type'        => 'required|max:32'
+        'alt'                   => 'max:256'
     );
 
     protected $messages = array(
