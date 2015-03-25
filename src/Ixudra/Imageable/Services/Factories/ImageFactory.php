@@ -1,59 +1,45 @@
 <?php namespace Ixudra\Imageable\Services\Factories;
 
 
-use \Str;
+use \Illuminate\Support\Str;
 use \File;
 
 use Ixudra\Imageable\Models\Image;
-use Ixudra\Imageable\Models\Response\FactoryResponse;
 
 class ImageFactory {
 
-    public function create($input, $imageable)
+    public function make($input, $imageable)
     {
-        $input = $this->preProcessInput($input, $imageable);
+        $image = Image::create( $this->preProcessInput($input, $imageable) );
 
-        $image = new Image();
-        $imageResponse = $image->make( $input );
+        $this->uploadFile( $input[ 'file' ], $imageable->getImagePath(), $image->file_name );
 
-        $response = new FactoryResponse( null, $input );
-        if( $imageResponse->isSuccessful() ) {
-            $response->setModel($image);
-            $response->addNotifications('success', array('Image created successfully'));
-        } else {
-            $response->addNotifications('error', array('Failure while creating image'));
-        }
-
-        return $response;
+        return $image;
     }
 
     public function modify($image, $input, $imageable)
     {
         $input = $this->preProcessInput($input, $imageable);
 
-        $imageResponse = $image->modify( $input );
+        $image->update( $input );
 
-        $response = new FactoryResponse( $image, $input );
-        if( $imageResponse->isSuccessful() ) {
-            $response->addNotifications('success', array('Image updated successfully'));
-        } else {
-            $response->addNotifications('error', array('Failure while updating image'));
-        }
-
-        return $response;
+        return $image;
     }
 
     protected function preProcessInput($input, $imageable)
     {
         $modelInput = array(
-            'title'                 => $input[ 'image_title' ],
-            'alt'                   => $input[ 'image_alt' ],
+            'title'                 => $input[ 'title' ],
+            'alt'                   => $input[ 'alt' ],
         );
 
-        if( array_key_exists( 'image', $input ) && !is_null( $input[ 'image' ] ) ) {
-            $modelInput[ 'file' ] = $input[ 'image' ];
-            $modelInput[ 'file_name' ] = $this->generateUniqueName( $input[ 'image' ], $imageable->getImagePath());
+        if( array_key_exists( 'file', $input ) && !is_null( $input[ 'file' ] ) ) {
+            $modelInput[ 'file' ] = $input[ 'file' ];
+            $modelInput[ 'file_name' ] = $this->generateUniqueName( $input[ 'file' ], $imageable->getImagePath() );
         }
+
+        $modelInput[ 'imageable_id' ] = $imageable->id;
+        $modelInput[ 'imageable_type' ] = get_class($imageable);
 
         return $modelInput;
     }
@@ -65,6 +51,11 @@ class ImageFactory {
         } while( file_exists( public_path( $path ) .'/'. $fileName ) );
 
         return $fileName;
+    }
+
+    protected function uploadFile($file, $path, $name)
+    {
+        $file->move( public_path( $path ), $name );
     }
 
 }

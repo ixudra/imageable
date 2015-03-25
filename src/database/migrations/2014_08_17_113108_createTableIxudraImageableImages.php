@@ -4,7 +4,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableImages extends Migration {
+class CreateTableIxudraImageableImages extends Migration {
 
     public function up()
     {
