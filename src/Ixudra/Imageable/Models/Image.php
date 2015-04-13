@@ -36,6 +36,40 @@ class Image extends Model {
     }
 
 
+    public function update(array $attributes = array())
+    {
+        if( array_key_exists( 'file', $attributes ) ) {
+            $this->deleteFile();
+            $this->uploadFile( $attributes[ 'file' ], $attributes[ 'file_name' ] );
+        }
+
+        parent::update( $attributes );
+    }
+
+    public function delete()
+    {
+        $this->deleteFile();
+
+        parent::delete();
+    }
+
+    protected function deleteFile()
+    {
+        if( file_exists( $this->getFullPath() ) ) {
+            unlink( $this->getFullPath() );
+        }
+    }
+
+    public function uploadFile($file, $fileName = '')
+    {
+        if( $fileName == '' ) {
+            $fileName = $this->file_name;
+        }
+
+        $file->move( public_path( $this->imageable->getImagePath() ), $fileName );
+    }
+
+
     public static function getRules()
     {
         return array(

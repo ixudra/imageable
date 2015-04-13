@@ -5,11 +5,16 @@ trait ImageFactoryTrait {
 
     public function extractImageInput($input)
     {
-        return array(
-            'file'          => $input[ 'file' ],
+        $imageInput = array(
             'title'         => $input[ 'title' ],
             'alt'           => $input[ 'alt' ]
         );
+
+        if( array_key_exists( 'file', $input ) && !is_null( $input['file'] ) ) {
+            $imageInput['file'] = $input[ 'file' ];
+        }
+
+        return $imageInput;
     }
 
 }

@@ -10,17 +10,15 @@ class ImageFactory {
 
     public function make($input, $imageable)
     {
-        $image = Image::create( $this->preProcessInput($input, $imageable) );
-
-        $this->uploadFile( $input[ 'file' ], $imageable->getImagePath(), $image->file_name );
+        $image = Image::create( $this->preProcessInput( $input, $imageable ) );
+        $image->uploadFile( $input[ 'file' ] );
 
         return $image;
     }
 
     public function modify($image, $input, $imageable)
     {
-        $input = $this->preProcessInput($input, $imageable);
-
+        $input = $this->preProcessInput( $input, $imageable );
         $image->update( $input );
 
         return $image;
