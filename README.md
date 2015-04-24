@@ -1,7 +1,7 @@
 ixudra/imageable
 =====================
 
-Custom Laravel imaging package for the Laravel 5 framework - developed by Ixudra.
+Custom Laravel imaging package for the Laravel 5 framework - developed by [Ixudra](http://ixudra.be).
 
 This package can be used by anyone at any given time, but keep in mind that it is optimized for my personal custom workflow. It may not suit your project perfectly and modifications may be in order.
 
@@ -29,6 +29,18 @@ Run package migrations using artisan:
 
 ```
 
+Alternatively, you can also publish the migrations using artisan:
+
+```php
+
+    // Publish all resources from all packages
+    php artisan vendor:publish
+    
+    // Publish only the resources of the package
+    php artisan vendor:publish --provider="Ixudra\\Imageable\\ImageableServiceProvider"
+
+```
+
 
 
 ## Usage
@@ -52,70 +64,65 @@ Create a model with a polymorphic relationship to the `Image` model:
             return $this->morphOne('Ixudra\Imageable\Models\Image', 'imageable');
         }
 
+
+        public function delete()
+        {
+            $this->image->delete();
+
+            parent::delete();
+        }
+
     }
 
 ```
 
 This class must extend the `Ixudra\Imageable\Traits\ImageableTrait` trait and must have the `imagePath` property available to it. The `imagePath` property describes the path to where the images need to be stored on the system. The package uses the `public/` directory as the starting point and will append the value of the `imagePath` value to it in order to derive the full path. 
 
-You can create new `Image` models using the `ImageFactory` class which is provided in the package:
+You can create new `Image` models using the `ImageFactory` class which is provided in the package. The `ImageFactory` will take care of creating the `Image` model, linking the `Image` to the designated model and moving the uploaded file to the location which is specified in the designated model.
+
+The `ImageFactory` expects a specific set of input parameters:
+
+ - `file` which holds the actual uploaded file
+ - `alt` which holds the name of the image (will be used as `alt` when displaying the image)
+ - `title` which holds the name of the image (will be used as `title` when displaying the image)
+ 
+The package also provides an `ImageFactoryTrait` which can be used to extract all the information necessary to create an `image` model from a general data array.
+
+Updating images works similar to creating them. All you need to do is provide the correct information and the `ImageFactory` will take care of the rest for you. It if also possible to update the image information without actually updating the uploaded file. This can be done by omitting the `file` attribute from the data that is passed to the factory.
+
+A full example of a factory class that leverages the package functionality can be found in the following example:
 
 ```php
 
+    use Ixudra\Imageable\Services\Factories\ImageFactory;
+    use Ixudra\Imageable\Traits\ImageFactoryTrait;
+
     class CardFactory {
+
+        use ImageFactoryTrait;
+
+
+        protected $imageFactory;
+
+
+        public function __construct(ImageFactory $imageFactory)
+        {
+            $this->imageFactory = $imageFactory;
+        }
+
 
         public function create($input)
         {
             $card = Card::create( array( 'name' => $input['name'] ) );
-            $imageResponse = App::make('\Ixudra\Imageable\Services\Factories\ImageFactory')
-                ->create( $input, $card );
-
-            $response = new BaseModelResponse( null, $input );
-            if( !is_null($card) && $imageResponse->isSuccessful() ) {
-                $card->save();
-
-                $imageResponse->getModel()->attachToTarget( $imageResponse->getInput()['file'], $card );
-            } else {
-                return null;
-            }
+            $this->imageFactory->make( $this->extractImageInput( $input ), $card );
 
             return $card;
         }
-
-    }
-
-```
-
-It is important to know that the factory does not actually save the the model in the database. This is done to make sure that all data (including the data of the polymorphic model) is valid before actually saving.
- 
-In order to actually link the `Image` with the polymorphic model, you need to call the `Image::attachToTarget()` method with the correct parameters. This will automatically set all attributes for the polymorphic relationship, move the image to the correct location on disk and finally save the model in the database.
-
-Updating images works similar to creating them. The only difference is that attaching the image via the form is no longer required. Additionally, you also need to make sure that you delete the existing image before attaching the new one:
-
-You can create new `Image` models using the `ImageFactory` class which is provided in the package:
-
-```php
-
-    class CardFactory {
 
         public function modify($card, $input)
         {
-            $card = $card->fill( array( 'name' => $input['name'] ) );
-            $imageResponse = App::make('\Ixudra\Imageable\Services\Factories\ImageFactory')
-                ->modify( $card->image, $input, $card );
-
-            $response = new BaseModelResponse( $card, $input );
-            if( $imageResponse->isSuccessful() ) {
-                $card->save();
-                $image = $imageResponse->getModel();
-
-                if( array_key_exists( 'file', $imageResponse->getInput() ) ) {
-                    $image->remove();
-                    $image->attachToTarget( $imageResponse->getInput()['file'], $card );
-                }
-
-                $image->save();
-            }
+            $card = $card->update( array( 'name' => $input['name'] ) );
+            $this->imageFactory->modify( $card->image, $this->extractImageInput( $input ), $card );
 
             return $card;
         }
@@ -123,3 +130,52 @@ You can create new `Image` models using the `ImageFactory` class which is provid
     }
 
 ```
+
+Finally, the package also provides several base views that can be used:
+ - `data.blade.php` which includes a Twitter Bootstrap implementation that will allow you to show the image on a page
+ - `fields.blade.php` which includes a Twitter Bootstrap implementation that can be included in forms to create and/or modify the image information
+ 
+Usage example of both cases can be found in the examples below:
+
+```php
+
+    {!! Form::open(array('url' => 'cards/', 'method' => 'POST', 'id' => 'createCard', 'class' => 'form-horizontal', 'role' => 'form', 'files' => true)) !!}
+
+        <div class="well well-large">
+            <div class='form-group {{ $errors->has('name') ? 'has-error' : '' }}'>
+                {!! Form::label('name', 'Name:', array('class' => 'control-label col-lg-3')) !!}
+                <div class="col-lg-6">
+                    {!! Form::text('name', $input['name'], array('class' => 'form-control')) !!}
+                    {!! $errors->first('name', '<span class="help-block">:message</span>') !!}
+                </div>
+            </div>
+        </div>
+
+        @include('imageable::images/fields')
+
+        <div class="action-button">
+            {!! Form::submit('Submit', array('class' => 'btn btn-primary')) !!}
+            {!! HTML::linkRoute('cards.index', 'Cancel', array(), array('class' => 'btn btn-default')) !!}
+        </div>
+
+    {!! Form::close() !!}
+
+```
+
+```php
+
+    <div class="row">
+        <div class="well well-large col-md-12">
+            <div class='col-md-10'>
+                <div class='col-md-4'>Name:</div>
+                <div class='col-md-8'>{{ $card->name }}</div>
+            </div>
+        </div>
+    </div>
+
+    @include('imageable::images/data', array('imageable' => $card))
+
+```
+
+The usage of these views is by no means required to take advantage of this package's functionality. However, it is worth noting that both views leverage some of the functionality of the [ixudra/translations](http://github.com/ixudra/translations) package. The `ixudra/translations` package is not included as a requirement for this package, but must be pulled in via composer in order to take advantage of the views which are provided by default. 
+
