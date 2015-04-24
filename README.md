@@ -88,7 +88,7 @@ The `ImageFactory` expects a specific set of input parameters:
  
 The package also provides an `ImageFactoryTrait` which can be used to extract all the information necessary to create an `image` model from a general data array.
 
-Updating images works similar to creating them. All you need to do is provide the correct information and the `ImageFactory` will take care of the rest for you. It if also possible to update the image information without actually updating the uploaded file. This can be done by omitting the `file` attribute from the data that is passed to the factory.
+Updating images works similar to creating them. All you need to do is provide the correct information and the `ImageFactory` will take care of the rest for you. It is also possible to update the image information without actually updating the uploaded file. This can be done by omitting the `file` attribute from the data that is passed to the factory.
 
 A full example of a factory class that leverages the package functionality can be found in the following example:
 
@@ -131,7 +131,8 @@ A full example of a factory class that leverages the package functionality can b
 
 ```
 
-Finally, the package also provides several base views that can be used:
+Finally, the package also provides several views that can be used:
+
  - `data.blade.php` which includes a Twitter Bootstrap implementation that will allow you to show the image on a page
  - `fields.blade.php` which includes a Twitter Bootstrap implementation that can be included in forms to create and/or modify the image information
  
@@ -177,5 +178,5 @@ Usage example of both cases can be found in the examples below:
 
 ```
 
-The usage of these views is by no means required to take advantage of this package's functionality. However, it is worth noting that both views leverage some of the functionality of the [ixudra/translations](http://github.com/ixudra/translations) package. The `ixudra/translations` package is not included as a requirement for this package, but must be pulled in via composer in order to take advantage of the views which are provided by default. 
+The usage of these views is by no means required to take advantage of the functionality in this package. However, it is worth noting that both views leverage the functionality of the [ixudra/translation](http://github.com/ixudra/translation) package by default. The `ixudra/translation` package is not included as a requirement for this package, but must be pulled in via composer in order to take advantage of the views which are provided by default. 
 
