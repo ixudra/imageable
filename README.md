@@ -163,6 +163,13 @@ Usage example of both cases can be found in the examples below:
 
 ```
 
+The fields.blade,php file by default assumes two variables:
+
+ - `$input`: associative array of default values of the input fields. Required keys: `title`, `alt`
+ - `$requiredFields`: array of input fields that the user is required to fill in. If the name of the field is in the array, a `required` property will be added to the form field, which can then be used to signal this to the user using CSS (not included)
+
+Both of these variables need to be passed to the view in order to use the default views.
+
 ```php
 
     <div class="row">
