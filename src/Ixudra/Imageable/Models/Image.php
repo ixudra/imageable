@@ -36,14 +36,14 @@ class Image extends Model {
     }
 
 
-    public function update(array $attributes = array())
+    public function update(array $attributes = array(), array $options = array())
     {
         if( array_key_exists( 'file', $attributes ) ) {
             $this->deleteFile();
             $this->uploadFile( $attributes[ 'file' ], $attributes[ 'file_name' ] );
         }
 
-        parent::update( $attributes );
+        parent::update( $attributes, $options );
     }
 
     public function delete()
