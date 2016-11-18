@@ -15,9 +15,22 @@ Pull this package in through Composer:
 
     {
         "require": {
-            "ixudra/imageable": "5.*"
+            "ixudra/imageable": "6.*"
         }
     }
+
+```
+
+Add the service provider to your `config/app.php` file:
+
+```php
+
+    'providers'     => array(
+
+        //...
+        Ixudra\Imageable\ImageableServiceProvider::class,
+
+    ),
 
 ```
 
@@ -86,8 +99,6 @@ The `ImageFactory` expects a specific set of input parameters:
  - `alt` which holds the name of the image (will be used as `alt` when displaying the image)
  - `title` which holds the name of the image (will be used as `title` when displaying the image)
  
-The package also provides an `ImageFactoryTrait` which can be used to extract all the information necessary to create an `image` model from a general data array.
-
 Updating images works similar to creating them. All you need to do is provide the correct information and the `ImageFactory` will take care of the rest for you. It is also possible to update the image information without actually updating the uploaded file. This can be done by omitting the `file` attribute from the data that is passed to the factory.
 
 A full example of a factory class that leverages the package functionality can be found in the following example:
@@ -99,9 +110,6 @@ A full example of a factory class that leverages the package functionality can b
 
     class CardFactory {
 
-        use ImageFactoryTrait;
-
-
         protected $imageFactory;
 
 
@@ -111,17 +119,17 @@ A full example of a factory class that leverages the package functionality can b
         }
 
 
-        public function create($input)
+        public function create($input, $prefix = '')
         {
             $card = Card::create( array( 'name' => $input['name'] ) );
-            $this->imageFactory->make( $this->extractImageInput( $input ), $card );
+            $this->imageFactory->make( $this->extractImageInput( $input ), $card, $prefix );
 
             return $card;
         }
 
-        public function modify($card, $input)
+        public function modify($card, $input, $prefix = '')
         {
-            $card = $card->update( array( 'name' => $input['name'] ) );
+            $card = $card->update( array( 'name' => $input['name'] ), $prefix );
             $this->imageFactory->modify( $card->image, $this->extractImageInput( $input ), $card );
 
             return $card;
@@ -152,7 +160,7 @@ Usage example of both cases can be found in the examples below:
             </div>
         </div>
 
-        @include('imageable::images/fields')
+        @include('imageable::images/fields', array( 'prefix' = 'image_' ))
 
         <div class="action-button">
             {!! Form::submit('Submit', array('class' => 'btn btn-primary')) !!}
@@ -186,4 +194,29 @@ Both of these variables need to be passed to the view in order to use the defaul
 ```
 
 The usage of these views is by no means required to take advantage of the functionality in this package. However, it is worth noting that both views leverage the functionality of the [ixudra/translation](http://github.com/ixudra/translation) package by default. The `ixudra/translation` package is not included as a requirement for this package, but must be pulled in via composer in order to take advantage of the views which are provided by default. 
+
+
+
+
+
+## Planning
+
+ - Improve support for multiple images per model
+
+
+
+
+## License
+
+This template is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+
+
+
+
+## Contact
+
+Jan Oris (developer)
+
+- Email: jan.oris@ixudra.be
+- Telephone: +32 496 94 20 57
 

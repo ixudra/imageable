@@ -82,6 +82,7 @@ class Image extends Model {
     public static function getDefaults()
     {
         return array(
+            'file'                  => null,
             'title'                 => '',
             'alt'                   => '',
         );

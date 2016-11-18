@@ -1,24 +1,25 @@
 <?php namespace Ixudra\Imageable\Services\Factories;
 
 
-use \Illuminate\Support\Str;
-use \File;
-
+use Illuminate\Support\Str;
+use Ixudra\Core\Services\Factories\BaseFactory;
 use Ixudra\Imageable\Models\Image;
 
-class ImageFactory {
+use File;
 
-    public function make($input, $imageable)
+class ImageFactory extends BaseFactory {
+
+    public function make($input, $imageable, $prefix = '')
     {
-        $image = Image::create( $this->preProcessInput( $input, $imageable ) );
+        $image = Image::create( $this->preProcessInput( $this->extractInput( $input, Image::getDefaults(), $prefix, true ), $imageable, $prefix ) );
         $image->uploadFile( $input[ 'file' ] );
 
         return $image;
     }
 
-    public function modify($image, $input, $imageable)
+    public function modify($image, $input, $imageable, $prefix = '')
     {
-        $input = $this->preProcessInput( $input, $imageable );
+        $input = $this->preProcessInput( $this->extractInput( $input, Image::getDefaults(), $prefix ), $imageable, $prefix );
         $image->update( $input );
 
         return $image;
@@ -31,7 +32,7 @@ class ImageFactory {
             'alt'                   => $input[ 'alt' ],
         );
 
-        if( array_key_exists( 'file', $input ) && !is_null( $input[ 'file' ] ) ) {
+        if( array_key_exists( 'file', $input ) && !empty( $input[ 'file' ] ) ) {
             $modelInput[ 'file' ] = $input[ 'file' ];
             $modelInput[ 'file_name' ] = $this->generateUniqueName( $input[ 'file' ], $imageable->getImagePath() );
         }
