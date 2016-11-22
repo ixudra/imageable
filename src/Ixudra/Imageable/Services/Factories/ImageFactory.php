@@ -11,15 +11,17 @@ class ImageFactory extends BaseFactory {
 
     public function make($input, $imageable, $prefix = '')
     {
-        $image = Image::create( $this->preProcessInput( $this->extractInput( $input, Image::getDefaults(), $prefix, true ), $imageable, $prefix ) );
-        $image->uploadFile( $input[ 'file' ] );
+        $imageInput = $this->preProcessInput( $this->extractInput($input, Image::getDefaults(), $prefix, true), $imageable );
+
+        $image = Image::create( $imageInput );
+        $image->uploadFile( $imageInput[ 'file' ] );
 
         return $image;
     }
 
     public function modify($image, $input, $imageable, $prefix = '')
     {
-        $input = $this->preProcessInput( $this->extractInput( $input, Image::getDefaults(), $prefix ), $imageable, $prefix );
+        $input = $this->preProcessInput( $this->extractInput( $input, Image::getDefaults(), $prefix ), $imageable );
         $image->update( $input );
 
         return $image;

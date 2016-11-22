@@ -3,6 +3,8 @@ ixudra/imageable
 
 Custom Laravel imaging package for the Laravel 5 framework - developed by [Ixudra](http://ixudra.be).
 
+The ixudra/imageable package provides an easy to use polymorphic image model that can be linked to one or more models in any Laravel PHP application. The package contains an image model class as well as a factory class that will take care of creating and editing the image model. Additionally, the package will also take care of moving and storing the actual files in the correct locations.
+
 This package can be used by anyone at any given time, but keep in mind that it is optimized for my personal custom workflow. It may not suit your project perfectly and modifications may be in order.
 
 
@@ -106,7 +108,6 @@ A full example of a factory class that leverages the package functionality can b
 ```php
 
     use Ixudra\Imageable\Services\Factories\ImageFactory;
-    use Ixudra\Imageable\Traits\ImageFactoryTrait;
 
     class CardFactory {
 
@@ -122,15 +123,15 @@ A full example of a factory class that leverages the package functionality can b
         public function create($input, $prefix = '')
         {
             $card = Card::create( array( 'name' => $input['name'] ) );
-            $this->imageFactory->make( $this->extractImageInput( $input ), $card, $prefix );
+            $this->imageFactory->make( $input, $card, $prefix );
 
             return $card;
         }
 
         public function modify($card, $input, $prefix = '')
         {
-            $card = $card->update( array( 'name' => $input['name'] ), $prefix );
-            $this->imageFactory->modify( $card->image, $this->extractImageInput( $input ), $card );
+            $card = $card->update( array( 'name' => $input['name'] ) );
+            $this->imageFactory->modify( $input, $card, $prefix );
 
             return $card;
         }
@@ -148,7 +149,7 @@ Usage example of both cases can be found in the examples below:
 
 ```php
 
-    {!! Form::open(array('url' => 'cards/', 'method' => 'POST', 'id' => 'createCard', 'class' => 'form-horizontal', 'role' => 'form', 'files' => true)) !!}
+    {!! Form::open(array('url' => 'cards', 'method' => 'POST', 'id' => 'createCard', 'class' => 'form-horizontal', 'role' => 'form', 'files' => true)) !!}
 
         <div class="well well-large">
             <div class='form-group {{ $errors->has('name') ? 'has-error' : '' }}'>
@@ -201,7 +202,8 @@ The usage of these views is by no means required to take advantage of the functi
 
 ## Planning
 
- - Improve support for multiple images per model
+- Improve support for multiple images per model
+- Add Javascript library to improve user interaction
 
 
 
