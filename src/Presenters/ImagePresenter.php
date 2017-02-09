@@ -1,9 +1,9 @@
 <?php namespace Ixudra\Imageable\Presenters;
 
 
-use \URL;
-
 use Laracasts\Presenter\Presenter;
+
+use URL;
 
 class ImagePresenter extends Presenter {
 

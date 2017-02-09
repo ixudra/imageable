@@ -1,8 +1,6 @@
 <?php namespace Ixudra\Imageable\Models;
 
 
-use App;
-
 use Illuminate\Database\Eloquent\Model;
 use Laracasts\Presenter\PresentableTrait;
 
