@@ -33,7 +33,5 @@
         "psr-4": {
             "Ixudra\\Imageable\\": "src/"
         }
-    },
-
-    "minimum-stability": "stable"
+    }
 }
