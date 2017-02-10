@@ -19,7 +19,7 @@
         "illuminate/database": "~5.2",
         "laravelcollective/html": "~5.2",
         "laracasts/presenter": "0.2.*",
-        "ixudra/core": "5.*"
+        "ixudra/core": "~5.0"
     },
 
     "suggest": {
