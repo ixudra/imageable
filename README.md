@@ -64,6 +64,7 @@ Create a model with a polymorphic relationship to the `Image` model:
 
 ```php
 
+    use Ixudra\Imageable\Models\Image;
     use Ixudra\Imageable\Traits\ImageableTrait;
 
     class Card extends Eloquent {
@@ -76,7 +77,7 @@ Create a model with a polymorphic relationship to the `Image` model:
 
         public function image()
         {
-            return $this->morphOne('Ixudra\Imageable\Models\Image', 'imageable');
+            return $this->morphOne( Image::class, 'imageable' );
         }
 
 
@@ -131,7 +132,7 @@ A full example of a factory class that leverages the package functionality can b
         public function modify($card, $input, $prefix = '')
         {
             $card = $card->update( array( 'name' => $input['name'] ) );
-            $this->imageFactory->modify( $input, $card, $prefix );
+            $this->imageFactory->modify( $card->image, $input, $card, $prefix );
 
             return $card;
         }
