@@ -1,6 +1,11 @@
 ixudra/imageable
 =====================
 
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/ixudra/imageable.svg?style=flat-square)](https://packagist.org/packages/ixudra/imageable)
+[![license](https://img.shields.io/github/license/ixudra/imageable.svg)]()
+[![StyleCI](https://styleci.io/repos/28279957/shield)](https://styleci.io/repos/28279957)
+[![Total Downloads](https://img.shields.io/packagist/dt/ixudra/imageable.svg?style=flat-square)](https://packagist.org/packages/ixudra/imageable)
+
 Custom Laravel imaging package for the Laravel 5 framework - developed by [Ixudra](http://ixudra.be).
 
 The ixudra/imageable package provides an easy to use polymorphic image model that can be linked to one or more models in any Laravel PHP application. The package contains an image model class as well as a factory class that will take care of creating and editing the image model. Additionally, the package will also take care of moving and storing the actual files in the correct locations.
