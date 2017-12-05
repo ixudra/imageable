@@ -1,7 +1,7 @@
 {
     "name": "ixudra/imageable",
     "description": "Custom Laravel imaging package for the Laravel 5 framework - developed by Ixudra",
-    "version": "7.0.0",
+    "version": "7.1.0",
     "keywords": ["Ixudra", "image", "Laravel"],
     "homepage": "http://ixudra.be",
     "license": "MIT",
