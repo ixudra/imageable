@@ -8,6 +8,16 @@ class ImageableServiceProvider extends ServiceProvider {
     protected $defer = false;
 
 
+    public function register()
+    {
+        // Publish configuration files
+        $this->mergeConfigFrom( __DIR__ .'/config/imageable.php', 'imageable' );
+
+        $this->publishes(array(
+            __DIR__ .'/config/imageable.php'        => config_path('imageable.php'),
+        ), 'config');
+    }
+
     public function boot()
     {
         $this->loadViewsFrom(__DIR__ .'/resources/views', 'imageable');
@@ -19,11 +29,6 @@ class ImageableServiceProvider extends ServiceProvider {
         $this->publishes(array(
             __DIR__ .'/database/migrations/'        => base_path('database/migrations')
         ), 'migrations');
-    }
-
-    public function register()
-    {
-        //...
     }
 
     public function provides()
