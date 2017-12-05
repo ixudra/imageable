@@ -15,7 +15,7 @@ class ImageValidationHelper extends BaseValidationHelper {
 
     public function getFormValidationRules($formName, $prefix = '')
     {
-        return Image::getRules();
+        return $this->getPrefixedRules( Image::getRules(), $prefix );
     }
 
 }

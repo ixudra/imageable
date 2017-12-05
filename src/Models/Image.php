@@ -2,7 +2,10 @@
 
 
 use Illuminate\Database\Eloquent\Model;
+use Ixudra\Imageable\Presenters\ImagePresenter;
 use Laracasts\Presenter\PresentableTrait;
+
+use Config;
 
 class Image extends Model {
 
@@ -25,7 +28,7 @@ class Image extends Model {
 
     protected $translationKey = 'image';
 
-    protected $presenter = '\Ixudra\Imageable\Presenters\ImagePresenter';
+    protected $presenter = ImagePresenter::class;
 
 
     public function imageable()
@@ -68,22 +71,31 @@ class Image extends Model {
     }
 
 
+    /**
+     * @codeCoverageIgnore
+     */
     public static function getRules()
     {
-        return array(
-            'file'                  => 'required|mimes:jpeg,jpg,png',
-            'title'                 => 'max:128',
-            'alt'                   => 'max:256',
-        );
+        $rules = Config::get('imageable.rules');
+
+        if( Config::get('imageable.restrictMimes') ) {
+            $mimes = Config::get('imageable.mimes');
+            if( !empty($rules[ 'file' ]) ) {
+                $rules[ 'file' ] .= '|';
+            }
+
+            $rules[ 'file' ] .= 'mimes:'. implode(',', $mimes);
+        }
+
+        return $rules;
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public static function getDefaults()
     {
-        return array(
-            'file'                  => null,
-            'title'                 => '',
-            'alt'                   => '',
-        );
+        return Config::get('imageable.defaults');
     }
 
 
