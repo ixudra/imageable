@@ -1,7 +1,7 @@
 {
     "name": "ixudra/imageable",
     "description": "Custom Laravel imaging package for the Laravel 5 framework - developed by Ixudra",
-    "version": "7.2.1",
+    "version": "8.0.0",
     "keywords": ["Ixudra", "image", "Laravel"],
     "homepage": "http://ixudra.be",
     "license": "MIT",
@@ -14,10 +14,10 @@
     ],
 
     "require": {
-        "php": ">=7.0",
-        "illuminate/support": "~5.5",
-        "illuminate/database": "~5.5",
-        "laravelcollective/html": "~5.2",
+        "php": ">=7.2",
+        "illuminate/support": "~6.0",
+        "illuminate/database": "~6.0",
+        "laravelcollective/html": "~6.0",
         "laracasts/presenter": "0.2.*",
         "ixudra/core": "~6.0"
     },

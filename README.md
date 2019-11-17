@@ -3,7 +3,6 @@ ixudra/imageable
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/ixudra/imageable.svg?style=flat-square)](https://packagist.org/packages/ixudra/imageable)
 [![license](https://img.shields.io/github/license/ixudra/imageable.svg)]()
-[![StyleCI](https://styleci.io/repos/28279957/shield)](https://styleci.io/repos/28279957)
 [![Total Downloads](https://img.shields.io/packagist/dt/ixudra/imageable.svg?style=flat-square)](https://packagist.org/packages/ixudra/imageable)
 
 Custom Laravel imaging package for the Laravel 5 framework - developed by [Ixudra](http://ixudra.be).
@@ -22,7 +21,7 @@ Pull this package in through Composer:
 
     {
         "require": {
-            "ixudra/imageable": "7.*"
+            "ixudra/imageable": "8.*"
         }
     }
 
